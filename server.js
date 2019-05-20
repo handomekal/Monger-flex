@@ -1,24 +1,28 @@
 var express = require("express");
-var logger = require("morgan");
 var mongoose = require("mongoose");
+var expressHandlebars = require("express-handlebars");
+var bodyParser = require("body-parser");
+var logger = require("morgan");
 
-// Our scraping tools
-// Axios is a promised-based http library, similar to jQuery's Ajax method
-// It works on the client and on the server
-var axios = require("axios");
-var cheerio = require("cheerio");
+var PORT = process.env.PORT || 3000;
 
-// Require all models
-var db = require("./models");
-
-var PORT = 3000;
-
-// Initialize Express
 var app = express();
 
-// Configure middleware
+var router = express.Router();
 
-// Use morgan logger for logging requests
+app.use(express.static(__dirname + "/public"));
+
+app.engine("handlebars", expressHandlebars({
+    defaultLayout: "main"
+}));
+app.set("view engine", "handlebars");
+ 
+app.use(bodyParser.urlencoded({
+    extended: false
+}))
+
+app.use(router);
+
 app.use(logger("dev"));
 // Parse request body as JSON
 app.use(express.urlencoded({ extended: true }));
@@ -28,8 +32,19 @@ app.use(express.static("public"));
 
 // Connect to the Mongo DB
 mongoose.connect("mongodb://localhost/unit18Populater", { useNewUrlParser: true });
+console.log("mongoose connection works")
+
+//mongoose.connect(db, function(error) {
+    //log any errors connection with mongoose
+    // if (error) {
+    //     console.log(error);
+    // }
+    // //or log a success message
+    // else {
+    //     console.log("mongoose connection is successful");
+    // }
+//});
 
 app.listen(PORT, function() {
-    console.log("App running on port " + PORT + "!");
-  });
-  
+    console.log("Listening on port:" + PORT);
+});
