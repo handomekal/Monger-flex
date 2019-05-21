@@ -8,7 +8,9 @@ var PORT = process.env.PORT || 3000;
 
 var app = express();
 
-var router = express.Router();
+
+
+var router = require("./config/routes")(app);
 
 app.use(express.static(__dirname + "/public"));
 
@@ -21,7 +23,7 @@ app.use(bodyParser.urlencoded({
     extended: false
 }))
 
-app.use(router);
+//app.use(router);
 
 app.use(logger("dev"));
 // Parse request body as JSON
