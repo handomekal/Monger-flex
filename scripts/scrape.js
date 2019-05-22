@@ -1,5 +1,6 @@
 var request = require("request");
 var cheerio = require("cheerio");
+var axios = require("axios")
 
 var scrape = function (cb) {
     request("https://twitter.com/search?src=typd&q=espn", function(err, res, body) {
